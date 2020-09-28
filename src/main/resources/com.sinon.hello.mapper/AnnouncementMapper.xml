@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinon.hello.mapper.AnnouncementMapper">
+    <resultMap id="BaseResultMap" type="com.sinon.hello.entity.AnnouncementDO">
+        <id property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="is_show" column="is_show" />
+        <result property="level" column="level" />
+        <result property="post_user_id" column="post_user_id" />
+        <result property="post_department_id" column="post_department_id" />
+        <result property="post_time" column="post_time" />
+        <result property="expired_time" column="expired_time" />
+        <result property="is_remove" column="is_remove" />
+        <result property="enterprise_id" column="enterprise_id" />
+        <result property="update_time" column="update_time" />
+    </resultMap>
+
+    <select id="selectTest" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from gsms_announcement where id = #{id}
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from gsms_announcement where id = #{id}
+    </select>
+
+</mapper>
