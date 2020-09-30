@@ -1,5 +1,7 @@
 package com.sinon.hello.annotation;
 
+import com.sinon.hello.config.datasource.DataBaseType;
+
 import java.lang.annotation.*;
 
 /**
@@ -14,4 +16,8 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 public @interface MasterDataSource {
+    // 默认为主库 MASTER
+    DataBaseType value() default DataBaseType.MASTER;
+    //是否启用负载均衡
+    boolean isBalance() default  true;
 }

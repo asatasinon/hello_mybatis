@@ -8,40 +8,53 @@ package com.sinon.hello.aop;
  */
 
 
+import com.sinon.hello.annotation.MasterDataSource;
+import com.sinon.hello.annotation.SlaveDataSource;
 import com.sinon.hello.config.datasource.DataBaseContextHolder;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 
 
 @Aspect
 @Component
 public class DataSourceAop {
 
-    @Pointcut()
-    public void master(){}
+    @Autowired
+    private DataBaseContextHolder dataBaseContextHolder;
 
-    @Pointcut()
-    public void slave(){}
-
-    @Before("@annotation(com.sinon.hello.annotation.SlaveDataSource)")
-    public void slavePoint() {
-        DataBaseContextHolder.setDataBaseSlave();
+    //定义 切换主库 切点
+    @Pointcut("@annotation(com.sinon.hello.annotation.MasterDataSource)")
+    public void master() {
+    }
+    //定义 切换从库 切点
+    @Pointcut("@annotation(com.sinon.hello.annotation.SlaveDataSource)")
+    public void slave() {
     }
 
-
-    @Before("@annotation(com.sinon.hello.annotation.MasterDataSource)")
-    public void masterPoint() {
-        DataBaseContextHolder.setDataBaseMaster();
+    //根据 masterDataSource.value() 切换至对应的主库链接
+    @Before("master() && @annotation(masterDataSource) ")
+    public void masterPoint(JoinPoint joinPoint, MasterDataSource masterDataSource) {
+        dataBaseContextHolder.setDataBaseType(masterDataSource.value());
     }
+
+    //切换从库
+    @Before("slave() && @annotation(slaveDataSource)")
+    public void slavePoint(JoinPoint joinPoint, SlaveDataSource slaveDataSource) {
+        dataBaseContextHolder.setDataBaseSlave(slaveDataSource.isBalance());
+    }
+
 
     //清除数据源的配置, 多个切点
-    @After("@annotation(com.sinon.hello.annotation.MasterDataSource) || @annotation(com.sinon.hello.annotation.SlaveDataSource) ")
+    @After("master() || slave()")
     public void restoreDataSource(JoinPoint joinPoint) {
-        DataBaseContextHolder.clearDataBaseType();
+        dataBaseContextHolder.clearDataBaseType();
     }
 
 

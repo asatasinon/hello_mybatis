@@ -4,26 +4,7 @@ server:
 spring:
   datasource:
     master:
-      name: master
-      driverClassName: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://172.16.0.112:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
-      username: root
-      password: 123456
-      maxTotal: 200
-      maxIdle: 8
-      minIdle: 8
-      initialSize: 10
-      maxWaitMillis: 3000
-      validationQuery: select 1
-      testWhileIdle: true
-      testOnBorrow: false
-      testOnReturn: false
-      maxLifetime: 10
-      hikari:
-        max-lifetime: 30000
-
-    slave1:
-      name: slave1
+      name: master1
       driverClassName: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://172.16.0.49:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       username: root
@@ -37,9 +18,41 @@ spring:
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
-      maxLifetime: 10
-      hikari:
-        max-lifetime: 30000
+      maxLifetime: 60000  #毫秒级
+
+    master2:
+      name: master2
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://172.16.0.112:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: 123456
+      maxTotal: 200
+      maxIdle: 8
+      minIdle: 8
+      initialSize: 10
+      maxWaitMillis: 3000
+      validationQuery: select 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      maxLifetime: 60000  #毫秒级
+
+    slave:
+      name: slave1
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://172.16.0.112:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: 123456
+      maxTotal: 200
+      maxIdle: 8
+      minIdle: 8
+      initialSize: 10
+      maxWaitMillis: 3000
+      validationQuery: select 1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      maxLifetime: 60000  #毫秒级
 
     slave2:
       name: slave2
@@ -56,9 +69,7 @@ spring:
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
-      maxLifetime: 10
-      hikari:
-        max-lifetime: 30000
+      maxLifetime: 60000  #毫秒级
 
 
 mybatis:
@@ -68,6 +79,9 @@ mybatis:
 #showSql
 logging:
   level:
-    com:
-      example:
-        mapper : debug
+    com.sinon.hello.mapper : debug
+
+mastercount:
+  num: 2
+slavecount:
+  num: 2
