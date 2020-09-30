@@ -41,13 +41,13 @@ public class DataSourceAop {
     //根据 masterDataSource.value() 切换至对应的主库链接
     @Before("master() && @annotation(masterDataSource) ")
     public void masterPoint(JoinPoint joinPoint, MasterDataSource masterDataSource) {
-        dataBaseContextHolder.setDataBaseType(masterDataSource.value());
+        dataBaseContextHolder.setDataBaseMaster(masterDataSource.value(),masterDataSource.isBalance());
     }
 
     //切换从库
     @Before("slave() && @annotation(slaveDataSource)")
     public void slavePoint(JoinPoint joinPoint, SlaveDataSource slaveDataSource) {
-        dataBaseContextHolder.setDataBaseSlave(slaveDataSource.isBalance());
+        dataBaseContextHolder.setDataBaseSlave(slaveDataSource.value(),slaveDataSource.isBalance());
     }
 
 

@@ -81,7 +81,7 @@ logging:
   level:
     com.sinon.hello.mapper : debug
 
-mastercount:
+masterdatasourcecount:
   num: 2
-slavecount:
+slavedatasourcecount:
   num: 2

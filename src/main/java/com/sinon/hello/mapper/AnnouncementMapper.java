@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AnnouncementMapper {
 
-    @MasterDataSource(DataBaseType.MASTER)
+    @MasterDataSource()
     AnnouncementDO selectTest(int id);
 
 //    @MasterDataSource(DataBaseType.MASTER_2)
