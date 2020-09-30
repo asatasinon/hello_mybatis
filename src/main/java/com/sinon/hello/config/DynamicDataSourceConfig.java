@@ -1,6 +1,6 @@
 package com.sinon.hello.config;
 
-import com.sinon.hello.config.datasource.DataBaseType;
+import com.sinon.hello.config.datasource.DataBaseTypeEnum;
 import com.sinon.hello.config.datasource.DynamicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -72,10 +72,10 @@ public class DynamicDataSourceConfig {
                                         @Qualifier("slave2DataSource") DataSource slave2DataSource) {
         //这个地方是比较核心的targetDataSource 集合是我们数据库和名字之间的映射
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put(DataBaseType.MASTER, masterDataSource);
-        targetDataSources.put(DataBaseType.MASTER_2, master2DataSource);
-        targetDataSources.put(DataBaseType.SLAVE, slaveDataSource);
-        targetDataSources.put(DataBaseType.SLAVE_2, slave2DataSource);
+        targetDataSources.put(DataBaseTypeEnum.MASTER, masterDataSource);
+        targetDataSources.put(DataBaseTypeEnum.MASTER_2, master2DataSource);
+        targetDataSources.put(DataBaseTypeEnum.SLAVE, slaveDataSource);
+        targetDataSources.put(DataBaseTypeEnum.SLAVE_2, slave2DataSource);
 
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);  // 设置默认的datasource
@@ -84,7 +84,6 @@ public class DynamicDataSourceConfig {
     }
 
     /**
-     *
      * @param dataSource
      * @return
      * @throws Exception

@@ -79,9 +79,12 @@ mybatis:
 #showSql
 logging:
   level:
-    com.sinon.hello.mapper : debug
+    com:
+      sinon:
+        hello:
+          mapper: debug
 
-masterdatasourcecount:
+master-datasource-count:
   num: 2
-slavedatasourcecount:
+slave-datasource-count:
   num: 2

@@ -2,7 +2,7 @@ package com.sinon.hello.mapper;
 
 import com.sinon.hello.annotation.MasterDataSource;
 import com.sinon.hello.annotation.SlaveDataSource;
-import com.sinon.hello.config.datasource.DataBaseType;
+import com.sinon.hello.config.datasource.BalanceTypeEnum;
 import com.sinon.hello.entity.AnnouncementDO;
 import org.springframework.stereotype.Repository;
 
@@ -18,8 +18,7 @@ public interface AnnouncementMapper {
     @MasterDataSource()
     AnnouncementDO selectTest(int id);
 
-//    @MasterDataSource(DataBaseType.MASTER_2)
-    @SlaveDataSource()
+    @SlaveDataSource(balanceType = BalanceTypeEnum.RANDOM)
     AnnouncementDO selectOne(int id);
 }
 

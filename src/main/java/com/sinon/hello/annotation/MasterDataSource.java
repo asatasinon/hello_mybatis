@@ -1,6 +1,7 @@
 package com.sinon.hello.annotation;
 
-import com.sinon.hello.config.datasource.DataBaseType;
+import com.sinon.hello.config.datasource.BalanceTypeEnum;
+import com.sinon.hello.config.datasource.DataBaseTypeEnum;
 
 import java.lang.annotation.*;
 
@@ -17,7 +18,8 @@ import java.lang.annotation.*;
 @Inherited
 public @interface MasterDataSource {
     // 默认为主库 MASTER
-    DataBaseType value() default DataBaseType.MASTER;
-    //是否启用负载均衡
-    boolean isBalance() default  true;
+    DataBaseTypeEnum value() default DataBaseTypeEnum.MASTER;
+
+    //负载均衡策略
+    BalanceTypeEnum balanceType() default BalanceTypeEnum.ROUND_ROBIN;
 }

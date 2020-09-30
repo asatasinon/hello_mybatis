@@ -9,7 +9,6 @@ package com.sinon.hello.config.datasource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import org.springframework.stereotype.Component;
 
 /**
  * 3 利用 DatabaseContextHolder 获取当前线程的 datasourcetype
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
     @Autowired
-    private  DataBaseContextHolder dataBaseContextHolder;
+    private DataBaseContextHolder dataBaseContextHolder;
 
     @Override
     protected Object determineCurrentLookupKey() {
