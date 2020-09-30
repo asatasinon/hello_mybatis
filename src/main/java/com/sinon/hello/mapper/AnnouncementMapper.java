@@ -2,7 +2,7 @@ package com.sinon.hello.mapper;
 
 import com.sinon.hello.annotation.MasterDataSource;
 import com.sinon.hello.annotation.SlaveDataSource;
-import com.sinon.hello.config.datasource.BalanceTypeEnum;
+import com.sinon.hello.enums.BalanceTypeEnum;
 import com.sinon.hello.entity.AnnouncementDO;
 import org.springframework.stereotype.Repository;
 

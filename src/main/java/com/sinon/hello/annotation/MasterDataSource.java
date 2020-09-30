@@ -1,7 +1,7 @@
 package com.sinon.hello.annotation;
 
-import com.sinon.hello.config.datasource.BalanceTypeEnum;
-import com.sinon.hello.config.datasource.DataBaseTypeEnum;
+import com.sinon.hello.enums.BalanceTypeEnum;
+import com.sinon.hello.enums.DataBaseTypeEnum;
 
 import java.lang.annotation.*;
 

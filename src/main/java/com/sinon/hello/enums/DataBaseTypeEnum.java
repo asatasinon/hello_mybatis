@@ -1,4 +1,4 @@
-package com.sinon.hello.config.datasource;
+package com.sinon.hello.enums;
 
 /**
  * @version 1.0.0

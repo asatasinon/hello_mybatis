@@ -1,6 +1,6 @@
 package com.sinon.hello.config;
 
-import com.sinon.hello.config.datasource.DataBaseTypeEnum;
+import com.sinon.hello.enums.DataBaseTypeEnum;
 import com.sinon.hello.config.datasource.DynamicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;

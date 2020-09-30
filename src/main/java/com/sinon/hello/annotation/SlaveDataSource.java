@@ -6,8 +6,8 @@ package com.sinon.hello.annotation;
  * @Description SlaveDataSouce
  * @CreateDate 2020/9/28
  */
-import com.sinon.hello.config.datasource.BalanceTypeEnum;
-import com.sinon.hello.config.datasource.DataBaseTypeEnum;
+import com.sinon.hello.enums.BalanceTypeEnum;
+import com.sinon.hello.enums.DataBaseTypeEnum;
 
 import java.lang.annotation.*;
 

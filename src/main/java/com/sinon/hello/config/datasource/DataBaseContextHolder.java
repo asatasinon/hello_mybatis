@@ -7,11 +7,10 @@ package com.sinon.hello.config.datasource;
  * @CreateDate 2020/9/28
  */
 
+import com.sinon.hello.enums.BalanceTypeEnum;
+import com.sinon.hello.enums.DataBaseTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 2. 创建线程安全的类，作为dataBaseType容器，放master，master2,slave,slave2.由于从库有两个，这里简单设置了一个负载均衡。

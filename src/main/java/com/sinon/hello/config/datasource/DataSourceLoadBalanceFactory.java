@@ -1,7 +1,7 @@
 package com.sinon.hello.config.datasource;
 
-import com.sinon.hello.config.datasource.BalanceTypeEnum;
-import com.sinon.hello.config.datasource.DataBaseTypeEnum;
+import com.sinon.hello.enums.BalanceTypeEnum;
+import com.sinon.hello.enums.DataBaseTypeEnum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Component
 public class DataSourceLoadBalanceFactory {
+
+    /**
+     * 阈值
+     */
+    private static final int COUNTER_THRESHOLD = 100000;
+
     /**
      * 初始值为 -1
      */
@@ -75,7 +81,8 @@ public class DataSourceLoadBalanceFactory {
         //主库节点
         if (dataBaseTypeEnum.isMasterDatasource()) {
             int masterIndex = COUNTER_MASTER.getAndIncrement() % masterNum;
-            if (COUNTER_MASTER.get() > 100000) {
+            if (COUNTER_MASTER.get() > COUNTER_THRESHOLD) {
+                //超过阈值，重置
                 COUNTER_MASTER.set(-1);
             }
             return MASTER_PREFIX + masterIndex;
@@ -83,7 +90,7 @@ public class DataSourceLoadBalanceFactory {
 
         //从库节点
         int slaveIndex = COUNTER_SLAVE.getAndIncrement() % slaveNum;
-        if (COUNTER_SLAVE.get() > 100000) {
+        if (COUNTER_SLAVE.get() > COUNTER_THRESHOLD) {
             COUNTER_SLAVE.set(-1);
         }
         return SLAVE_PREFIX + slaveIndex;
@@ -96,6 +103,7 @@ public class DataSourceLoadBalanceFactory {
      * @return 节点
      */
     private int randomBalance(DataBaseTypeEnum dataBaseTypeEnum) {
+        //随机种子
         Random r = new Random();
         if (dataBaseTypeEnum.isMasterDatasource()) {
             return MASTER_PREFIX + r.nextInt(masterNum);
