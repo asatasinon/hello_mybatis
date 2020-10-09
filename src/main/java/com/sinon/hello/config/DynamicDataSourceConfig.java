@@ -29,6 +29,9 @@ import java.util.Map;
 @Configuration
 public class DynamicDataSourceConfig {
 
+    /**
+     *  主库
+     */
     // 将这个对象放入Spring容器中 , 并定义名称为 masterDataSource
     @Bean(name = "masterDataSource")
     // 表示这个数据源是默认数据源
@@ -45,6 +48,11 @@ public class DynamicDataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 
+
+
+    /**
+     *  从库
+     */
     @Bean(name = "slaveDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.slave")
     public DataSource slaveDataSource() {
