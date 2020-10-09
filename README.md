@@ -7,7 +7,7 @@
 # 3.正确的配置流程:
 
   1.先在 application-{profile}.xml 文件下，配置好对应的 jdbc 数据库连接， 
-  并根据配置的 主库（masterdatasourcecount.num） 与 从库 （slavedatasourcecount.num）的数量，分别填写 对应的 num。
+  并根据配置的 主库（master-datasource-count.num） 与 从库 （slave-datasource-count.num）的数量，分别填写 对应的 num。
   
   2.根据配置的数据源 是 主库 还是 从库， 在 DataBaseType 配置到对应的 数据源类型。
   
