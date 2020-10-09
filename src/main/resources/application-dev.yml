@@ -6,7 +6,7 @@ spring:
     master:
       name: master1
       driverClassName: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://172.16.0.49:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       username: root
       password: 123456
       maxTotal: 200
@@ -23,7 +23,7 @@ spring:
     master2:
       name: master2
       driverClassName: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://172.16.0.112:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       username: root
       password: 123456
       maxTotal: 200
@@ -40,7 +40,7 @@ spring:
     slave:
       name: slave1
       driverClassName: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://172.16.0.112:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       username: root
       password: 123456
       maxTotal: 200
@@ -57,7 +57,7 @@ spring:
     slave2:
       name: slave2
       driverClassName: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://172.16.0.49:3306/mos6.2_gsms?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&autoReconnect=true&sessionVariables=FOREIGN_KEY_CHECKS=0&useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       username: root
       password: 123456
       maxTotal: 200
