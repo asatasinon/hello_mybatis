@@ -5,17 +5,16 @@
 初始化 项目 -master
 
 # 3.正确的配置流程:
-
-  1.先在 application-{profile}.xml 文件下，配置好对应的 jdbc 数据库连接， 
+1.先在 application-{profile}.xml 文件下，配置好对应的 jdbc 数据库连接， 
   并根据配置的 主库（master-datasource-count.num） 与 从库 （slave-datasource-count.num）的数量，分别填写 对应的 num。
   
-  2.根据配置的数据源 是 主库 还是 从库， 在 DataBaseType 配置到对应的 数据源类型。
-  
-  3.在 DynamicDataSourceConfig 中 配置对应的 bean 创建的路径。
-  
-  4.将 创建的 bean 添加到 routingDataSource 的参数，并 加入 targetDataSources 。
-  
-  5.在需要的使用主库的位置使用 `@MasterDataSource()` , 在需要的使用主库的位置则使用 `@SlaveDataSource()`
+2.根据配置的数据源 是 主库 还是 从库， 在 DataBaseType 配置到对应的 数据源类型。
+
+3.在 DynamicDataSourceConfig 中 配置对应的 bean 创建的路径。
+
+4.将 创建的 bean 添加到 routingDataSource 的参数，并 加入 targetDataSources 。
+
+5.在需要的使用主库的位置使用 `@MasterDataSource()` , 在需要的使用主库的位置则使用 `@SlaveDataSource()`
 
 # 4.优化项目
 ## 4.1
@@ -28,20 +27,25 @@
 
 # 5.使用Redis缓存
 1.配置文件添加对应参数
+
 2.创建RedisConfig配置类
+
 3.创建RedisUtil工具类
+
 4.在Main文件 添加 @EnableCaching 启用缓存
+
 5.对应的service添加对应的@CacheConfig，如AnnouncementService添加@CacheConfig(cacheNames = "announcement")，
   则指定 使用的缓存空间名为announcement。
+
 6.对应的方法则使用 @Cacheable(key = "#id")，@Cacheable()内使用 SpEL表达式。
 
 # 6.Cache注解详解
-## @CacheConfig
+## 6.1 @CacheConfig
   @CacheConfig：主要用于配置该类中会用到的一些共用的缓存配置。
     在这里@CacheConfig(cacheNames = "announcement")：配置了该数据访问对象中返回的内容将存储于名为announcement的缓存对象中，我
     们也可以不使用该注解，直接通过@Cacheable自己配置缓存集的名字来定义。
  
- ## @Cacheable 
+## 6.2 @Cacheable 
   @Cacheable：配置了findByName函数的返回值将被加入缓存。
     同时在查询时，会先从缓存中获取，若不存在才再发起对数据库的访问。该注解主要有下面几个参数：
   
@@ -67,15 +71,68 @@
   cacheResolver：用于指定使用那个缓存解析器，非必需。
     需通过org.springframework.cache.interceptor.CacheResolver接口来实现自己的缓存解析器，并用该参数指定。
 
-## @CachePut
+## 6.3 @CachePut
   @CachePut：配置于函数上，能够根据参数定义条件来进行缓存，
     它与@Cacheable不同的是，它每次都会真是调用函数，所以主要用于数据新增和修改操作上。
     它的参数与@Cacheable类似，具体功能可参考上面对@Cacheable参数的解析
 
-## @CacheEvict
+## 6.4 @CacheEvict
   @CacheEvict：配置于函数上，通常用在删除方法上，用来从缓存中移除相应数据。
     除了同@Cacheable一样的参数之外，它还有下面两个参数：
     allEntries：非必需，默认为false。当为true时，会移除所有数据
     beforeInvocation：非必需，默认为false，会在调用方法之后移除数据。当为true时，会在调用方法之前移除数据。
 
+# 7. 定时任务
+1.在Main文件 添加 @EnableScheduling 启用定时任务
 
+2.在对应需要定时执行的方法上添加注解 @Scheduled(cron = "*/1 * * * * ?") ，内容使用cron表达式
+
+# 8.　Cron表达式
+Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：
+
+（1）Seconds Minutes Hours DayOfMonth Month DayOfWeek Year
+
+（2）Seconds Minutes Hours DayOfMonth Month DayOfWeek
+ 
+## 8.1 结构
+ corn从左到右（用空格隔开）：秒 分 小时 月份中的日期 月份 星期中的日期 年份
+## 8.2 各字段的含义
+| 字段 | 允许值 | 允许的特殊字符 |
+|:--- |:--- |:---  |
+| 秒（Seconds） | 0~59的整数 | , - * /    四个字符 |
+| 分（Minutes） | 0~59的整数 | , - * /    四个字符 |
+| 小时（Hours） | 0~23的整数 | , - * /    四个字符 |
+| 日期（DayOfMonth） | 1~31的整数（但是你需要考虑你月的天数） | ,- * ? / L W C     八个字符 |
+| 月份（Month） | 1~12的整数或者 JAN-DEC | , - * /    四个字符 |
+| 星期（DayOfWeek） | 1~7的整数或者 SUN-SAT （1=SUN） | , - * ? / L C #     八个字符 |
+| 年(可选，留空)（Year） | 1970~2099 | , - * /    四个字符 |
+
+## 8.3 特殊字符说明
+（1）`*`：表示匹配该域的任意值。假如在Minutes域使用*, 即表示每分钟都会触发事件。
+
+（2）`?`：只能用在DayOfMonth和DayOfWeek两个域。它也匹配域的任意值，但实际不会。因为DayofMonth和DayofWeek会相互影响。例如想在每月的20日触发调度，不管20日到底是星期几，则只能使用如下写法： 13 13 15 20 * ?, 其中最后一位只能用？，而不能使用*，如果使用*表示不管星期几都会触发，实际上并不是这样。
+
+（3）`-`：表示范围。例如在Minutes域使用5-20，表示从5分到20分钟每分钟触发一次 
+
+（4）`/`：表示起始时间开始触发，然后每隔固定时间触发一次。例如在Minutes域使用5/20,则意味着5分钟触发一次，而25，45等分别触发一次. 
+
+（5）`,`：表示列出枚举值。例如：在Minutes域使用5,20，则意味着在5和20分每分钟触发一次。 
+
+（6）`L`：表示最后，只能出现在DayOfWeek和DayOfMonth域。如果在DayOfWeek域使用5L,意味着在最后的一个星期四触发。 
+
+（7）`W`:表示有效工作日(周一到周五),只能出现在DayOfMonth域，系统将在离指定日期的最近的有效工作日触发事件。例如：在 DayOfMonth使用5W，如果5日是星期六，则将在最近的工作日：星期五，即4日触发。如果5日是星期天，则在6日(周一)触发；如果5日在星期一到星期五中的一天，则就在5日触发。另外一点，W的最近寻找不会跨过月份 。
+
+（8）`LW`:这两个字符可以连用，表示在某个月最后一个工作日。 
+
+（9）`#`:用于确定每个月第几个星期几，只能出现在DayOfMonth域。例如在4#2，表示某月的第二个星期三。
+
+
+
+# 参考网址
+>[项目配置参考](https://blog.csdn.net/iku5200/article/details/82856621)
+
+>[多数据源配置参考](https://zhuanlan.zhihu.com/p/83923714)
+
+>[缓存参考](https://www.cnblogs.com/yixianyixian/p/7427878.html)
+
+>[cron表达式参考](https://www.cnblogs.com/javahr/p/8318728.html)
