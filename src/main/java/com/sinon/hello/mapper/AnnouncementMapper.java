@@ -14,16 +14,11 @@ import org.springframework.stereotype.Repository;
  * @Description AnnouncementMapper
  * @CreateDate 2020/9/23
  */
-@CacheConfig(cacheNames = "announcement")
 @Repository
 public interface AnnouncementMapper {
 
-    @Cacheable(key = "#id")
-    @MasterDataSource()
     AnnouncementDO selectTest(int id);
 
-    //@SlaveDataSource(balanceType = BalanceTypeEnum.ROUND_ROBIN)
-    @MasterDataSource()
     AnnouncementDO selectOne(int id);
 }
 

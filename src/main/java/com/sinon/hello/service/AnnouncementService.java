@@ -5,6 +5,8 @@ import com.sinon.hello.annotation.SlaveDataSource;
 import com.sinon.hello.entity.AnnouncementDO;
 import com.sinon.hello.mapper.AnnouncementMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Service
+@CacheConfig(cacheNames = "announcement")
 public class AnnouncementService  {
     private final AnnouncementMapper announcementMapper;
 
@@ -27,10 +30,15 @@ public class AnnouncementService  {
         this.announcementMapper = announcementMapper;
     }
 
+
+    @MasterDataSource()
+    @Cacheable(key = "{#id}")
     public AnnouncementDO selectTest(int id) {
         return announcementMapper.selectTest(id);
     }
 
+    @MasterDataSource()
+    //@SlaveDataSource(balanceType = BalanceTypeEnum.ROUND_ROBIN)
     public AnnouncementDO selectOne(int id) {
         return announcementMapper.selectOne(id);
     }
