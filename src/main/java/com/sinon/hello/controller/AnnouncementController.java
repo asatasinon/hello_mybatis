@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @Author <a href="huangyanzhi@wxchina.com">Sinon</a>
  * @Description AnnouncementController
  * @CreateDate 2020/9/23
+ * <p>
+ * 解决页面乱码
+ * produces = "application/json;charset=UTF-8"
  */
 @RestController
-@RequestMapping("/test")
+@RequestMapping(value = "/test", produces = "application/json;charset=UTF-8")
 public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;

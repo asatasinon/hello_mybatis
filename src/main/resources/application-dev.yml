@@ -71,6 +71,16 @@ spring:
       testOnReturn: false
       maxLifetime: 60000  #毫秒级
 
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 0
+    database: 0
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
 
 mybatis:
   mapper-locations: classpath:com.sinon.hello.mapper/*Mapper.xml
