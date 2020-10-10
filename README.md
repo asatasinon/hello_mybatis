@@ -31,7 +31,7 @@
 2.创建RedisConfig配置类
 3.创建RedisUtil工具类
 4.在Main文件 添加 @EnableCaching 启用缓存
-5.对应的mapper添加对应的@CacheConfig，如AnnouncementMapper添加@CacheConfig(cacheNames = "announcement")，
+5.对应的service添加对应的@CacheConfig，如AnnouncementService添加@CacheConfig(cacheNames = "announcement")，
   则指定 使用的缓存空间名为announcement。
 6.对应的方法则使用 @Cacheable(key = "#id")，@Cacheable()内使用 SpEL表达式。
 
