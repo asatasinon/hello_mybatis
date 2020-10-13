@@ -87,7 +87,7 @@
 
 2.在对应需要定时执行的方法上添加注解 @Scheduled(cron = "*/1 * * * * ?") ，内容使用cron表达式
 
-# 8.　Cron表达式
+# 8. Cron表达式
 Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7个域，每一个域代表一个含义，Cron有如下两种语法格式：
 
 （1）Seconds Minutes Hours DayOfMonth Month DayOfWeek Year
@@ -129,10 +129,10 @@ Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7
 
 
 # 参考网址
->[项目配置参考](https://blog.csdn.net/iku5200/article/details/82856621)
+>[项目配置](https://blog.csdn.net/iku5200/article/details/82856621)
 
->[多数据源配置参考](https://zhuanlan.zhihu.com/p/83923714)
+>[多数据源配置](https://zhuanlan.zhihu.com/p/83923714)
 
->[缓存参考](https://www.cnblogs.com/yixianyixian/p/7427878.html)
+>[Redis缓存](https://www.cnblogs.com/yixianyixian/p/7427878.html)
 
->[cron表达式参考](https://www.cnblogs.com/javahr/p/8318728.html)
+>[cron表达式](https://www.cnblogs.com/javahr/p/8318728.html)
