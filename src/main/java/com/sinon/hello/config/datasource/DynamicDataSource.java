@@ -15,11 +15,29 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * 动态数据源（需要继承AbstractRoutingDataSource）
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
-    @Autowired
+    private DynamicDataSource() {}
+
+    private static DynamicDataSource instance;
+
     private DataBaseContextHolder dataBaseContextHolder;
 
     @Override
     protected Object determineCurrentLookupKey() {
         return dataBaseContextHolder.getDataBaseType();
+    }
+
+    public static synchronized DynamicDataSource getInstance() {
+        if (instance == null) {
+            synchronized (DynamicDataSource.class) {
+                if (instance == null) {
+                    instance = new DynamicDataSource();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void setDataBaseContextHolder(DataBaseContextHolder dataBaseContextHolder){
+        this.dataBaseContextHolder = dataBaseContextHolder;
     }
 }

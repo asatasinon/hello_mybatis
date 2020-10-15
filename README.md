@@ -13,7 +13,7 @@
 3.在 DynamicDataSourceConfig 中 配置对应的 bean 创建的路径。
 
 4.将 创建的 bean 添加到 routingDataSource 的参数，并 加入 targetDataSources 。
-
+    
 5.在需要的使用主库的位置使用 `@MasterDataSource()` , 在需要的使用主库的位置则使用 `@SlaveDataSource()`
 
 # 4.优化项目

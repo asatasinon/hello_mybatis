@@ -1,5 +1,6 @@
 package com.sinon.hello.config;
 
+import com.sinon.hello.config.datasource.DataBaseContextHolder;
 import com.sinon.hello.enums.DataBaseTypeEnum;
 import com.sinon.hello.config.datasource.DynamicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -10,7 +11,9 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -29,8 +32,9 @@ import java.util.Map;
 @Configuration
 public class DynamicDataSourceConfig {
 
+
     /**
-     *  主库
+     * 主库
      */
     // 将这个对象放入Spring容器中 , 并定义名称为 masterDataSource
     @Bean(name = "masterDataSource")
@@ -49,9 +53,8 @@ public class DynamicDataSourceConfig {
     }
 
 
-
     /**
-     *  从库
+     * 从库
      */
     @Bean(name = "slaveDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.slave")
@@ -77,7 +80,9 @@ public class DynamicDataSourceConfig {
     public DataSource routingDataSource(@Qualifier("masterDataSource") DataSource masterDataSource,
                                         @Qualifier("master2DataSource") DataSource master2DataSource,
                                         @Qualifier("slaveDataSource") DataSource slaveDataSource,
-                                        @Qualifier("slave2DataSource") DataSource slave2DataSource) {
+                                        @Qualifier("slave2DataSource") DataSource slave2DataSource,
+                                        DataBaseContextHolder dataBaseContextHolder
+    ) {
         //这个地方是比较核心的targetDataSource 集合是我们数据库和名字之间的映射
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataBaseTypeEnum.MASTER, masterDataSource);
@@ -85,11 +90,17 @@ public class DynamicDataSourceConfig {
         targetDataSources.put(DataBaseTypeEnum.SLAVE, slaveDataSource);
         targetDataSources.put(DataBaseTypeEnum.SLAVE_2, slave2DataSource);
 
-        DynamicDataSource dynamicDataSource = new DynamicDataSource();
+        DynamicDataSource dynamicDataSource = DynamicDataSource.getInstance();
+        dynamicDataSource.setDataBaseContextHolder(dataBaseContextHolder);
         dynamicDataSource.setDefaultTargetDataSource(masterDataSource);  // 设置默认的datasource
         dynamicDataSource.setTargetDataSources(targetDataSources);  // 该方法是AbstractRoutingDataSource的方法
         return dynamicDataSource;
     }
+
+
+    //如果使用的是mybatis-config.xml
+//    @Value("${mybatis.config-location}")
+//    private String mybatisConfigLocation;
 
     /**
      * @param dataSource
@@ -106,6 +117,25 @@ public class DynamicDataSourceConfig {
                 new PathMatchingResourcePatternResolver()
                         .getResources("classpath:com.sinon.hello.mapper/*.xml"));
         return sqlSessionFactoryBean.getObject();
+
+        //如果使用的是mybatis-config.xml
+        //String path = mybatisConfigLocation.replace("classpath:", "/");
+        //ClassPathResource resource = new ClassPathResource(path);
+
+        //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+        //factory.setDataSource(dataSource);
+        //factory.setConfigLocation(resource);
+
+        //return factory.getObject();
+    }
+
+    /**
+     * 配置事务管理器
+     */
+    @Bean
+    public DataSourceTransactionManager transactionManager(@Qualifier("routingDataSource") DataSource dataSource)
+            throws Exception {
+        return new DataSourceTransactionManager(dataSource);
     }
 
 }

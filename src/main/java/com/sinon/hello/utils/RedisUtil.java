@@ -1,4 +1,4 @@
-package com.sinon.hello.util;
+package com.sinon.hello.utils;
 
 
 import com.alibaba.fastjson.JSON;
