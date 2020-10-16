@@ -16,6 +16,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Component;
+
 import java.lang.reflect.Method;
 
 
@@ -26,18 +27,28 @@ public class DataSourceAop {
     @Autowired
     private DataBaseContextHolder dataBaseContextHolder;
 
-    //定义 切换主库 切点
-    @Pointcut("@annotation(com.sinon.hello.annotation.MasterDataSource)")
-    public void master() {
+    //定义 切换主库 类切点
+    @Pointcut("within(@com.sinon.hello.annotation.MasterDataSource *)")
+    public void masterType() {
     }
 
-    //定义 切换从库 切点
+    //定义 切换从库 类切点
+    @Pointcut("within(@com.sinon.hello.annotation.SlaveDataSource *)")
+    public void slaveType() {
+    }
+
+    //定义 切换主库 方法切点
+    @Pointcut("@annotation(com.sinon.hello.annotation.MasterDataSource)")
+    public void masterMethod() {
+    }
+
+    //定义 切换从库 方法切点
     @Pointcut("@annotation(com.sinon.hello.annotation.SlaveDataSource)")
-    public void slave() {
+    public void slaveMethod() {
     }
 
     //切换库
-    @Around("master() || slave()")
+    @Around("masterType() || slaveType() || masterMethod() || slaveMethod()")
     public Object slavePoint(ProceedingJoinPoint joinPoint) throws Throwable {
 
         //获取类的字节码对象，通过字节码对象获取方法信息
@@ -56,6 +67,9 @@ public class DataSourceAop {
         */
         SupperDataSource supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetMethod, SupperDataSource.class);
 
+        if (supperDataSource == null) {
+            supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetCls, SupperDataSource.class);
+        }
         //执行切换数据源
         dataBaseContextHolder.setDataBase(supperDataSource.value(), supperDataSource.balanceType());
 

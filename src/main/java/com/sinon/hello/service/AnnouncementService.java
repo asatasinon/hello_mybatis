@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @CacheConfig(cacheNames = "announcement")
+@SlaveDataSource
 public class AnnouncementService  {
     private final AnnouncementMapper announcementMapper;
 
@@ -39,13 +40,11 @@ public class AnnouncementService  {
         return announcementMapper.selectTest(id);
     }
 
-    @SlaveDataSource
+
     //@SlaveDataSource(balanceType = BalanceTypeEnum.ROUND_ROBIN)
+    @SlaveDataSource
     public AnnouncementDO selectOne(int id) {
-        System.out.println("selectOne start");
-        AnnouncementDO announcementDO = announcementMapper.selectOne(id);
-        System.out.println("selectOne end");
-        return  announcementDO;
+        return  announcementMapper.selectOne(id);
     }
 
 

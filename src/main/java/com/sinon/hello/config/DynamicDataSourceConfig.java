@@ -5,6 +5,7 @@ import com.sinon.hello.enums.DataBaseTypeEnum;
 import com.sinon.hello.config.datasource.DynamicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -91,9 +92,20 @@ public class DynamicDataSourceConfig {
         targetDataSources.put(DataBaseTypeEnum.SLAVE_2, slave2DataSource);
 
         DynamicDataSource dynamicDataSource = DynamicDataSource.getInstance();
+        // 该方法是 DataBaseContextHolder 的方法
         dynamicDataSource.setDataBaseContextHolder(dataBaseContextHolder);
-        dynamicDataSource.setDefaultTargetDataSource(masterDataSource);  // 设置默认的datasource
-        dynamicDataSource.setTargetDataSources(targetDataSources);  // 该方法是AbstractRoutingDataSource的方法
+        /*
+          设置 默认的datasource
+          如果不设置默认数据源；
+          则需要手动处理 DataBaseContextHolder.getDataBaseType()的返回值会出现null的情况，具体代码如下：
+          public DataBaseTypeEnum getDataBaseType() {
+              return Optional.ofNullable(CONTEXT_HOLDER.get()).orElse(DataBaseTypeEnum.MASTER);
+          }
+         */
+        //dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
+
+        // 该方法是AbstractRoutingDataSource的方法
+        dynamicDataSource.setTargetDataSources(targetDataSources);
         return dynamicDataSource;
     }
 
@@ -107,7 +119,7 @@ public class DynamicDataSourceConfig {
      * @return
      * @throws Exception
      */
-    @Bean(name = "SqlSessionFactory")
+    @Bean(name = "dynamicSqlSessionFactory")
     public SqlSessionFactory SqlSessionFactory(@Qualifier("routingDataSource") DataSource dataSource)
             throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -133,9 +145,18 @@ public class DynamicDataSourceConfig {
      * 配置事务管理器
      */
     @Bean
-    public DataSourceTransactionManager transactionManager(@Qualifier("routingDataSource") DataSource dataSource)
+    public DataSourceTransactionManager dynamicDataSourceTransactionManager(@Qualifier("routingDataSource") DataSource dataSource)
             throws Exception {
         return new DataSourceTransactionManager(dataSource);
+    }
+
+    /**
+     * 配置事务管理器
+     */
+    @Bean
+    public SqlSessionTemplate dynamicSqlSessionTemplate(
+            @Qualifier("dynamicSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+        return new SqlSessionTemplate(sqlSessionFactory);
     }
 
 }

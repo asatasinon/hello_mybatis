@@ -12,6 +12,8 @@ import com.sinon.hello.enums.DataBaseTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * 2. 创建线程安全的类，作为dataBaseType容器，放master，master2,slave,slave2.由于从库有两个，这里简单设置了一个负载均衡。
  */
@@ -37,11 +39,16 @@ public class DataBaseContextHolder {
 
     /**
      * 获取当前的数据源
-     *
-     * @return 默认值为 DataBaseTypeEnum.MASTER
+     * <p>
+     * 手动处理NULL值，避免NPE，
+     * 如果不手动处理NULL值,直接返回 CONTEXT_HOLDER.get()，
+     * 需要在 DynamicDataSourceConfig 类里的 routingDataSource 方法
+     * 配置 dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
+     * </p>
+     * @return 默认值 DataBaseTypeEnum.MASTER
      */
     public DataBaseTypeEnum getDataBaseType() {
-        return CONTEXT_HOLDER.get() == null ? DataBaseTypeEnum.MASTER : CONTEXT_HOLDER.get();
+        return Optional.ofNullable(CONTEXT_HOLDER.get()).orElse(DataBaseTypeEnum.MASTER);
     }
 
     /**
