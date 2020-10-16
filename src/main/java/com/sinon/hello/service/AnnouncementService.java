@@ -29,12 +29,15 @@ import java.util.concurrent.TimeUnit;
 public class AnnouncementService  {
     private final AnnouncementMapper announcementMapper;
 
+    @Autowired
+    private AnnouncementService announcementService;
+
     public AnnouncementService(AnnouncementMapper announcementMapper) {
         this.announcementMapper = announcementMapper;
     }
 
 
-    @MasterDataSource
+    @SlaveDataSource
     //@Cacheable(key = "{#id}")
     public AnnouncementDO selectTest(int id) {
         return announcementMapper.selectTest(id);
@@ -42,9 +45,13 @@ public class AnnouncementService  {
 
 
     //@SlaveDataSource(balanceType = BalanceTypeEnum.ROUND_ROBIN)
-    @SlaveDataSource
+    @MasterDataSource
     public AnnouncementDO selectOne(int id) {
-        return  announcementMapper.selectOne(id);
+        AnnouncementDO announcementDO2 =announcementService.selectTest(id);
+        AnnouncementDO announcementDO1 = announcementMapper.selectOne(id);
+        System.out.println(announcementDO2);
+        System.out.println(announcementDO1);
+        return  announcementDO1;
     }
 
 
