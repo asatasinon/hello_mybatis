@@ -126,6 +126,16 @@ Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7
 
 （9）`#`:用于确定每个月第几个星期几，只能出现在DayOfMonth域。例如在4#2，表示某月的第二个星期三。
 
+# 9. AOP优化
+## 9.1 利用 @Around+反射 将 @Before 与 @After 糅合在一起
+```
+/*
+1.利用 @Around+反射 将 @Before 与 @After 糅合在一起, 减少重复代码。
+2.要使用AnnotatedElementUtils
+  如果还是用AnnotationUtils会发现继承不起作用，
+  这个在AnnotationUtils类的英文文档中也有说明.
+*/
+```
 
 
 # 参考网址
@@ -136,3 +146,5 @@ Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7
 >[Redis缓存](https://www.cnblogs.com/yixianyixian/p/7427878.html)
 
 >[cron表达式](https://www.cnblogs.com/javahr/p/8318728.html)
+
+>[AOP中使用反射](https://blog.csdn.net/u013259361/article/details/102913329)

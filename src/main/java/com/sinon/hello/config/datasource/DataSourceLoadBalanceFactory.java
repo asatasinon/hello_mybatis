@@ -23,10 +23,15 @@ public class DataSourceLoadBalanceFactory {
     private static final int COUNTER_THRESHOLD = 100000;
 
     /**
-     * 初始值为 -1
+     * 初始值为0
      */
-    private static final AtomicInteger COUNTER_MASTER = new AtomicInteger(-1);
-    private static final AtomicInteger COUNTER_SLAVE = new AtomicInteger(-1);
+    private static final int COUNTER_START = 0;
+
+    /**
+     * 初始化
+     */
+    private static final AtomicInteger COUNTER_MASTER = new AtomicInteger(COUNTER_START);
+    private static final AtomicInteger COUNTER_SLAVE = new AtomicInteger(COUNTER_START);
 
     /**
      * 主库起始点为 1
@@ -83,7 +88,7 @@ public class DataSourceLoadBalanceFactory {
             int masterIndex = COUNTER_MASTER.getAndIncrement() % masterNum;
             if (COUNTER_MASTER.get() > COUNTER_THRESHOLD) {
                 //超过阈值，重置
-                COUNTER_MASTER.set(-1);
+                COUNTER_MASTER.set(COUNTER_START);
             }
             return MASTER_PREFIX + masterIndex;
         }
@@ -91,7 +96,7 @@ public class DataSourceLoadBalanceFactory {
         //从库节点
         int slaveIndex = COUNTER_SLAVE.getAndIncrement() % slaveNum;
         if (COUNTER_SLAVE.get() > COUNTER_THRESHOLD) {
-            COUNTER_SLAVE.set(-1);
+            COUNTER_SLAVE.set(COUNTER_START);
         }
         return SLAVE_PREFIX + slaveIndex;
     }

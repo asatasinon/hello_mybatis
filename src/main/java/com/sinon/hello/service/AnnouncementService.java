@@ -3,6 +3,8 @@ package com.sinon.hello.service;
 import com.sinon.hello.annotation.MasterDataSource;
 import com.sinon.hello.annotation.SlaveDataSource;
 import com.sinon.hello.entity.AnnouncementDO;
+import com.sinon.hello.enums.BalanceTypeEnum;
+import com.sinon.hello.enums.DataBaseTypeEnum;
 import com.sinon.hello.mapper.AnnouncementMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -31,16 +33,19 @@ public class AnnouncementService  {
     }
 
 
-    @MasterDataSource()
-    @Cacheable(key = "{#id}")
+    @MasterDataSource
+    //@Cacheable(key = "{#id}")
     public AnnouncementDO selectTest(int id) {
         return announcementMapper.selectTest(id);
     }
 
-    @MasterDataSource()
+    @SlaveDataSource
     //@SlaveDataSource(balanceType = BalanceTypeEnum.ROUND_ROBIN)
     public AnnouncementDO selectOne(int id) {
-        return announcementMapper.selectOne(id);
+        System.out.println("selectOne start");
+        AnnouncementDO announcementDO = announcementMapper.selectOne(id);
+        System.out.println("selectOne end");
+        return  announcementDO;
     }
 
 
