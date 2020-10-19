@@ -1,7 +1,9 @@
 package com.sinon.hello.annotation;
 
+import com.sinon.hello.config.loadbalance.IDataSourceLoadBalance;
+import com.sinon.hello.config.loadbalance.impl.NoneDataSourceLoadBalanceImpl;
 import com.sinon.hello.enums.BalanceTypeEnum;
-import com.sinon.hello.enums.DataBaseTypeEnum;
+import com.sinon.hello.enums.DataSourceTypeEnum;
 import org.springframework.stereotype.Indexed;
 
 import java.lang.annotation.*;
@@ -19,8 +21,8 @@ import java.lang.annotation.*;
 @Indexed
 public @interface SupperDataSource {
     // 默认为主库 MASTER
-    DataBaseTypeEnum value() default DataBaseTypeEnum.MASTER;
+    DataSourceTypeEnum value() default DataSourceTypeEnum.MASTER;
 
-    //负载均衡策略
-    BalanceTypeEnum balanceType() default BalanceTypeEnum.ROUND_ROBIN;
+    //负载均衡策略实现类
+    Class<? extends IDataSourceLoadBalance> clazzDataBaseLoadBalance() default NoneDataSourceLoadBalanceImpl.class;
 }

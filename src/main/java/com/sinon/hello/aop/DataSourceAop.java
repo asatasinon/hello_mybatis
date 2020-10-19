@@ -9,7 +9,7 @@ package com.sinon.hello.aop;
 
 
 import com.sinon.hello.annotation.SupperDataSource;
-import com.sinon.hello.config.datasource.DataBaseContextHolder;
+import com.sinon.hello.config.datasource.DataSourceContextHolder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 public class DataSourceAop {
 
     @Autowired
-    private DataBaseContextHolder dataBaseContextHolder;
+    private DataSourceContextHolder dataSourceContextHolder;
 
     //定义 切换主库 类切点
     @Pointcut("within(@com.sinon.hello.annotation.MasterDataSource *)")
@@ -67,17 +67,18 @@ public class DataSourceAop {
         */
         SupperDataSource supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetMethod, SupperDataSource.class);
 
+        //如果为空，则获取 类 的注解
         if (supperDataSource == null) {
             supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetCls, SupperDataSource.class);
         }
         //执行切换数据源
-        dataBaseContextHolder.setDataBase(supperDataSource.value(), supperDataSource.balanceType());
+        dataSourceContextHolder.setDataSourceType(supperDataSource.value(), supperDataSource.clazzDataBaseLoadBalance().newInstance());
 
         //执行操作
         Object result = joinPoint.proceed();
 
         //执行清除数据源的配置,防止后面的语句使用上一个语句 的 SqlConnection
-        dataBaseContextHolder.clearDataBaseType();
+        dataSourceContextHolder.clearDataSourceType();
 
         //不返回数据则会报错
         return result;

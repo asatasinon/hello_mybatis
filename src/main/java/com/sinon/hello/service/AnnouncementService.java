@@ -3,18 +3,10 @@ package com.sinon.hello.service;
 import com.sinon.hello.annotation.MasterDataSource;
 import com.sinon.hello.annotation.SlaveDataSource;
 import com.sinon.hello.entity.AnnouncementDO;
-import com.sinon.hello.enums.BalanceTypeEnum;
-import com.sinon.hello.enums.DataBaseTypeEnum;
 import com.sinon.hello.mapper.AnnouncementMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @version 1.0.0

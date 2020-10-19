@@ -1,7 +1,7 @@
 package com.sinon.hello.config;
 
-import com.sinon.hello.config.datasource.DataBaseContextHolder;
-import com.sinon.hello.enums.DataBaseTypeEnum;
+import com.sinon.hello.config.datasource.DataSourceContextHolder;
+import com.sinon.hello.enums.DataSourceTypeEnum;
 import com.sinon.hello.config.datasource.DynamicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -12,7 +12,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -82,18 +81,18 @@ public class DynamicDataSourceConfig {
                                         @Qualifier("master2DataSource") DataSource master2DataSource,
                                         @Qualifier("slaveDataSource") DataSource slaveDataSource,
                                         @Qualifier("slave2DataSource") DataSource slave2DataSource,
-                                        DataBaseContextHolder dataBaseContextHolder
+                                        DataSourceContextHolder dataSourceContextHolder
     ) {
         //这个地方是比较核心的targetDataSource 集合是我们数据库和名字之间的映射
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put(DataBaseTypeEnum.MASTER, masterDataSource);
-        targetDataSources.put(DataBaseTypeEnum.MASTER_2, master2DataSource);
-        targetDataSources.put(DataBaseTypeEnum.SLAVE, slaveDataSource);
-        targetDataSources.put(DataBaseTypeEnum.SLAVE_2, slave2DataSource);
+        targetDataSources.put(DataSourceTypeEnum.MASTER, masterDataSource);
+        targetDataSources.put(DataSourceTypeEnum.MASTER_2, master2DataSource);
+        targetDataSources.put(DataSourceTypeEnum.SLAVE, slaveDataSource);
+        targetDataSources.put(DataSourceTypeEnum.SLAVE_2, slave2DataSource);
 
         DynamicDataSource dynamicDataSource = DynamicDataSource.getInstance();
         // 该方法是 DataBaseContextHolder 的方法
-        dynamicDataSource.setDataBaseContextHolder(dataBaseContextHolder);
+        dynamicDataSource.setDataSourceContextHolder(dataSourceContextHolder);
         /*
           设置 默认的datasource
           如果不设置默认数据源；

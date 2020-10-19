@@ -7,7 +7,6 @@ package com.sinon.hello.config.datasource;
  * @CreateDate 2020/9/28
  */
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 /**
@@ -19,11 +18,11 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private static DynamicDataSource instance;
 
-    private DataBaseContextHolder dataBaseContextHolder;
+    private DataSourceContextHolder dataSourceContextHolder;
 
     @Override
     protected Object determineCurrentLookupKey() {
-        return dataBaseContextHolder.getDataBaseType();
+        return dataSourceContextHolder.getDataSourceType();
     }
 
     public static synchronized DynamicDataSource getInstance() {
@@ -37,7 +36,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return instance;
     }
 
-    public void setDataBaseContextHolder(DataBaseContextHolder dataBaseContextHolder){
-        this.dataBaseContextHolder = dataBaseContextHolder;
+    public void setDataSourceContextHolder(DataSourceContextHolder dataSourceContextHolder){
+        this.dataSourceContextHolder = dataSourceContextHolder;
     }
 }

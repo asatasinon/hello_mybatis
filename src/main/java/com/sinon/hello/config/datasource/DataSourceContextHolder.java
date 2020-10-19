@@ -7,40 +7,39 @@ package com.sinon.hello.config.datasource;
  * @CreateDate 2020/9/28
  */
 
+import com.sinon.hello.config.loadbalance.IDataSourceLoadBalance;
 import com.sinon.hello.enums.BalanceTypeEnum;
-import com.sinon.hello.enums.DataBaseTypeEnum;
+import com.sinon.hello.enums.DataSourceTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.Stack;
 
 /**
  * 2. 创建线程安全的类，作为dataBaseType容器，放master，master2,slave,slave2.由于从库有两个，这里简单设置了一个负载均衡。
  */
 @Component
-public class DataBaseContextHolder {
+public class DataSourceContextHolder {
     /**
      * 使用 ThreadLocal，保存线程安全
      * 使用 Stack<DataBaseTypeEnum>，保存同一线程内多次切换的数据源，
      * 防止AOP切点执行完后执行清空数据源配置，将数据源配置变成了 DataBaseTypeEnum.MASTER
      */
-    private static final ThreadLocal<Stack<DataBaseTypeEnum>> CONTEXT_HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<Stack<DataSourceTypeEnum>> CONTEXT_HOLDER = new ThreadLocal<>();
 
-    @Autowired
-    private DataSourceLoadBalanceFactory dataSourceLoadBalanceFactory;
+
 
     /**
      * 根据传入的 dataBaseTypeEnum 切换 数据源
      *
-     * @param dataBaseTypeEnum DataBaseTypeEnum
+     * @param dataSourceTypeEnum DataBaseTypeEnum
      */
-    public void setDataBaseType(DataBaseTypeEnum dataBaseTypeEnum) throws NullPointerException {
+    public void setDataSourceType(DataSourceTypeEnum dataSourceTypeEnum) throws NullPointerException {
         if (CONTEXT_HOLDER.get() == null) {
             CONTEXT_HOLDER.set(new Stack<>());
         }
-        CONTEXT_HOLDER.get().push(dataBaseTypeEnum);
-        System.out.println("=====================> 切换到 " + dataBaseTypeEnum.name());
+        CONTEXT_HOLDER.get().push(dataSourceTypeEnum);
+        System.out.println("=====================> 切换到 " + dataSourceTypeEnum.name());
     }
 
     /**
@@ -54,10 +53,10 @@ public class DataBaseContextHolder {
      *
      * @return 默认值 DataBaseTypeEnum.MASTER
      */
-    public DataBaseTypeEnum getDataBaseType() {
+    public DataSourceTypeEnum getDataSourceType() {
         //如果栈 为null 或 为空，则返回 DataBaseTypeEnum.MASTER;
         if (CONTEXT_HOLDER.get() == null || CONTEXT_HOLDER.get().isEmpty()) {
-            return DataBaseTypeEnum.MASTER;
+            return DataSourceTypeEnum.MASTER;
         }
         // 如果栈不为空，则取栈顶元素
         return CONTEXT_HOLDER.get().peek();
@@ -66,18 +65,21 @@ public class DataBaseContextHolder {
     /**
      * 根据负载均衡策略切换主库
      *
-     * @param dataBaseTypeEnum 指定切换的主库库节点
-     * @param balanceTypeEnum  负载均衡策略
+     * @param dataSourceTypeEnum 指定切换的主库库节点
+     * @param dataSourceLoadBalance  负载均衡策略
      */
-    public void setDataBase(DataBaseTypeEnum dataBaseTypeEnum, BalanceTypeEnum balanceTypeEnum) {
-        int index = dataSourceLoadBalanceFactory.loadBalance(dataBaseTypeEnum, balanceTypeEnum);
-        setDataBaseType(DataBaseTypeEnum.getDataBaseType(index));
+    public void setDataSourceType(DataSourceTypeEnum dataSourceTypeEnum, IDataSourceLoadBalance dataSourceLoadBalance) {
+        int index = dataSourceLoadBalance.loadBalance(dataSourceTypeEnum);
+        setDataSourceType(DataSourceTypeEnum.getDataSourceType(index));
     }
 
     /**
-     * 清空数据源，防止后面的调用 使用了 上一次 的 数据库
+     * 将栈顶数据源出栈，防止后面的调用 使用了 上一次 的 数据库
      */
-    public void clearDataBaseType() {
-        CONTEXT_HOLDER.get().pop();
+    public void clearDataSourceType() {
+        //Stack不为null且不为空，则将栈顶数据源出栈
+        if (CONTEXT_HOLDER.get() != null && !CONTEXT_HOLDER.get().isEmpty()) {
+            CONTEXT_HOLDER.get().pop();
+        }
     }
 }
