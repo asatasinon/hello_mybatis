@@ -31,8 +31,6 @@ import java.util.Map;
  */
 @Configuration
 public class DynamicDataSourceConfig {
-
-
     /**
      * 主库
      */
@@ -51,7 +49,6 @@ public class DynamicDataSourceConfig {
     public DataSource master2DataSource() {
         return DataSourceBuilder.create().build();
     }
-
 
     /**
      * 从库
@@ -93,15 +90,13 @@ public class DynamicDataSourceConfig {
         DynamicDataSource dynamicDataSource = DynamicDataSource.getInstance();
         // 该方法是 DataBaseContextHolder 的方法
         dynamicDataSource.setDataSourceContextHolder(dataSourceContextHolder);
+
         /*
           设置 默认的datasource
           如果不设置默认数据源；
-          则需要手动处理 DataBaseContextHolder.getDataBaseType()的返回值会出现null的情况，具体代码如下：
-          public DataBaseTypeEnum getDataBaseType() {
-              return Optional.ofNullable(CONTEXT_HOLDER.get()).orElse(DataBaseTypeEnum.MASTER);
-          }
+          则需要手动处理 DataBaseContextHolder.getDataBaseType()的返回值会出现null的情况
          */
-        //dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
+        dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
 
         // 该方法是AbstractRoutingDataSource的方法
         dynamicDataSource.setTargetDataSources(targetDataSources);
@@ -110,8 +105,8 @@ public class DynamicDataSourceConfig {
 
 
     //如果使用的是mybatis-config.xml
-//    @Value("${mybatis.config-location}")
-//    private String mybatisConfigLocation;
+    //@Value("${mybatis.config-location}")
+    //private String mybatisConfigLocation;
 
     /**
      * @param dataSource
@@ -119,7 +114,7 @@ public class DynamicDataSourceConfig {
      * @throws Exception
      */
     @Bean(name = "dynamicSqlSessionFactory")
-    public SqlSessionFactory SqlSessionFactory(@Qualifier("routingDataSource") DataSource dataSource)
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("routingDataSource") DataSource dataSource)
             throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);

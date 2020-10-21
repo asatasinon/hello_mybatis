@@ -2,7 +2,6 @@ package com.sinon.hello.annotation;
 
 import com.sinon.hello.config.loadbalance.IDataSourceLoadBalance;
 import com.sinon.hello.config.loadbalance.impl.NoneDataSourceLoadBalanceImpl;
-import com.sinon.hello.enums.BalanceTypeEnum;
 import com.sinon.hello.enums.DataSourceTypeEnum;
 import org.springframework.stereotype.Indexed;
 
@@ -11,10 +10,10 @@ import java.lang.annotation.*;
 /**
  * @version 1.0.0
  * @Author <a href="huangyanzhi@wxchina.com">Sinon</a>
- * @Description SupperDataSource
+ * @Description 数据源超类注解
  * @CreateDate 2020/10/16
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited

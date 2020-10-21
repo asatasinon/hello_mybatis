@@ -1,5 +1,6 @@
 package com.sinon.hello.config.datasource;
 
+import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 /**
  * @version 1.0.0
  * @Author <a href="huangyanzhi@wxchina.com">Sinon</a>
@@ -7,16 +8,15 @@ package com.sinon.hello.config.datasource;
  * @CreateDate 2020/9/28
  */
 
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-
 /**
  * 3 利用 DatabaseContextHolder 获取当前线程的 datasourcetype
  * 动态数据源（需要继承AbstractRoutingDataSource）
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
-    private DynamicDataSource() {}
+    private DynamicDataSource() {
+    }
 
-    private static DynamicDataSource instance;
+    private static volatile DynamicDataSource instance;
 
     private DataSourceContextHolder dataSourceContextHolder;
 
@@ -25,7 +25,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return dataSourceContextHolder.getDataSourceType();
     }
 
-    public static synchronized DynamicDataSource getInstance() {
+    public static DynamicDataSource getInstance() {
         if (instance == null) {
             synchronized (DynamicDataSource.class) {
                 if (instance == null) {
@@ -36,7 +36,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return instance;
     }
 
-    public void setDataSourceContextHolder(DataSourceContextHolder dataSourceContextHolder){
+    public void setDataSourceContextHolder(DataSourceContextHolder dataSourceContextHolder) {
         this.dataSourceContextHolder = dataSourceContextHolder;
     }
 }

@@ -1,13 +1,5 @@
 package com.sinon.hello.aop;
 
-/**
- * @version 1.0.0
- * @Author <a href="huangyanzhi@wxchina.com">Sinon</a>
- * @Description DataSourceAop
- * @CreateDate 2020/9/28
- */
-
-
 import com.sinon.hello.annotation.SupperDataSource;
 import com.sinon.hello.config.datasource.DataSourceContextHolder;
 import org.aspectj.lang.ProceedingJoinPoint;

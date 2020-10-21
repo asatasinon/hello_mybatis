@@ -2,7 +2,6 @@ package com.sinon.hello.annotation;
 
 import com.sinon.hello.config.loadbalance.IDataSourceLoadBalance;
 import com.sinon.hello.config.loadbalance.impl.NoneDataSourceLoadBalanceImpl;
-import com.sinon.hello.enums.BalanceTypeEnum;
 import com.sinon.hello.enums.DataSourceTypeEnum;
 import org.springframework.core.annotation.AliasFor;
 
@@ -11,11 +10,11 @@ import java.lang.annotation.*;
 /**
  * @version 1.0.0
  * @Author <a href="huangyanzhi@wxchina.com">Sinon</a>
- * @Description MasterDataSource
+ * @Description 主库切换注解
  * @CreateDate 2020/9/28
  */
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited

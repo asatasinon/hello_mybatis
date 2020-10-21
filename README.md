@@ -147,6 +147,20 @@ Cron表达式是一个字符串，字符串以5或6个空格隔开，分为6或7
  使用 Stack<DataBaseTypeEnum>，保存同一线程内多次切换的数据源，
  每次AOP切点完成后，会将栈顶元素出栈。保证数据源正确。
  防止AOP切点执行完后执行清空数据源配置，将数据源配置变成了 DataBaseTypeEnum.MASTER
+ 
+## 9.4 使用deque
+DataSourceContextHolder的数据源集合由stack优化为deque；优化threadlocal初始值逻辑；优化设置数据源以及清空数据源的逻辑。
+
+# 10.负载均衡策略优化
+## 10.1 负载均衡策略工厂抽象为接口类
+负载均衡策略工厂抽象为接口类：IDataSourceLoadBalance
+## 10.2 负载均衡策略接口实现类为 NoneDataSourceLoadBalanceImpl
+负载均衡策略接口实现类为 NoneDataSourceLoadBalanceImpl
+意思为 不使用负载均衡
+## 10.3 负载均衡策略接口实现类为 RoundRobinDataSourceLoadBalanceImpl
+负载均衡策略接口实现类为 RoundRobinDataSourceLoadBalanceImpl
+意思为 使用轮询负载
+
 
 # 参考网址
 >[项目配置](https://blog.csdn.net/iku5200/article/details/82856621)
