@@ -2,6 +2,7 @@ package com.sinon.hello.aop;
 
 import com.sinon.hello.annotation.SupperDataSource;
 import com.sinon.hello.config.datasource.DataSourceContextHolder;
+import com.sinon.hello.utils.ApplicationContextProvider;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -52,11 +53,12 @@ public class DataSourceAop {
 
         /*
           这里要使用AnnotatedElementUtils
-          如果还是用AnnotationUtils会发现继承不起作用
+          如果还是用AnnotationUtils会发现注解的继承不起作用
           这个在AnnotationUtils类的英文文档中也有说明
 
           //SupperDataSource supperDataSource = AnnotationUtils.findAnnotation(targetMethod,SupperDataSource.class);
         */
+        //获取 方法 的注解
         SupperDataSource supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetMethod, SupperDataSource.class);
 
         //如果为空，则获取 类 的注解
@@ -64,7 +66,8 @@ public class DataSourceAop {
             supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetCls, SupperDataSource.class);
         }
         //执行切换数据源
-        dataSourceContextHolder.setDataSourceType(supperDataSource.value(), supperDataSource.clazzDataBaseLoadBalance().newInstance());
+        dataSourceContextHolder.setDataSourceType(supperDataSource.value(),
+                ApplicationContextProvider.getBean(supperDataSource.clazzDataBaseLoadBalance()));
 
         //执行操作
         Object result = joinPoint.proceed();

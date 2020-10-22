@@ -3,6 +3,7 @@ package com.sinon.hello.config.loadbalance.impl;
 
 import com.sinon.hello.config.loadbalance.IDataSourceLoadBalance;
 import com.sinon.hello.enums.DataSourceTypeEnum;
+import org.springframework.stereotype.Component;
 
 /**
  * @version 1.0.0
@@ -11,6 +12,7 @@ import com.sinon.hello.enums.DataSourceTypeEnum;
  * @CreateDate 2020/10/19
  */
 
+@Component
 public class NoneDataSourceLoadBalanceImpl implements IDataSourceLoadBalance {
     @Override
     public int loadBalance(DataSourceTypeEnum dataSourceTypeEnum) {
