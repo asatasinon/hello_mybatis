@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Indexed
-public @interface SupperDataSource {
+public @interface SuperDataSource {
     // 默认为主库 MASTER
     DataSourceTypeEnum value() default DataSourceTypeEnum.MASTER;
 

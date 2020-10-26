@@ -1,6 +1,6 @@
 package com.sinon.hello.aop;
 
-import com.sinon.hello.annotation.SupperDataSource;
+import com.sinon.hello.annotation.SuperDataSource;
 import com.sinon.hello.config.datasource.DataSourceContextHolder;
 import com.sinon.hello.utils.ApplicationContextProvider;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -42,7 +42,7 @@ public class DataSourceAop {
 
     //切换库
     @Around("masterType() || slaveType() || masterMethod() || slaveMethod()")
-    public Object slavePoint(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object switchPoint(ProceedingJoinPoint joinPoint) throws Throwable {
 
         //获取类的字节码对象，通过字节码对象获取方法信息
         Class<?> targetCls = joinPoint.getTarget().getClass();
@@ -59,15 +59,15 @@ public class DataSourceAop {
           //SupperDataSource supperDataSource = AnnotationUtils.findAnnotation(targetMethod,SupperDataSource.class);
         */
         //获取 方法 的注解
-        SupperDataSource supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetMethod, SupperDataSource.class);
+        SuperDataSource superDataSource = AnnotatedElementUtils.findMergedAnnotation(targetMethod, SuperDataSource.class);
 
         //如果为空，则获取 类 的注解
-        if (supperDataSource == null) {
-            supperDataSource = AnnotatedElementUtils.findMergedAnnotation(targetCls, SupperDataSource.class);
+        if (superDataSource == null) {
+            superDataSource = AnnotatedElementUtils.findMergedAnnotation(targetCls, SuperDataSource.class);
         }
         //执行切换数据源
-        dataSourceContextHolder.setDataSourceType(supperDataSource.value(),
-                ApplicationContextProvider.getBean(supperDataSource.clazzDataBaseLoadBalance()));
+        dataSourceContextHolder.setDataSourceType(superDataSource.value(),
+                ApplicationContextProvider.getBean(superDataSource.clazzDataBaseLoadBalance()));
 
         //执行操作
         Object result = joinPoint.proceed();

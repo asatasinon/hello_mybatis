@@ -19,12 +19,12 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@SupperDataSource
+@SuperDataSource
 public @interface SlaveDataSource {
-    @AliasFor(annotation = SupperDataSource.class, attribute = "value")
+    @AliasFor(annotation = SuperDataSource.class, attribute = "value")
     DataSourceTypeEnum value() default DataSourceTypeEnum.SLAVE;
 
     //负载均衡策略实现类
-    @AliasFor(annotation = SupperDataSource.class, attribute = "clazzDataBaseLoadBalance")
+    @AliasFor(annotation = SuperDataSource.class, attribute = "clazzDataBaseLoadBalance")
     Class<? extends IDataSourceLoadBalance> clazzDataBaseLoadBalance() default NoneDataSourceLoadBalanceImpl.class;
 }
