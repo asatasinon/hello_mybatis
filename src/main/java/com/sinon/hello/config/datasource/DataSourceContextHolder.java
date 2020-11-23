@@ -17,15 +17,15 @@ import java.util.Optional;
  */
 
 /**
- * 2. 创建线程安全的类，作为dataBaseType容器，放master，master2,slave,slave2.由于从库有两个，这里简单设置了一个负载均衡。
+ * 2. 创建线程安全的类，作为dataSourceType容器，放master，master2,slave,slave2.由于从库有两个，这里简单设置了一个负载均衡。
  */
 @Component
 public class DataSourceContextHolder {
     private static final int DEFAULT_DEQUE_CAPACITY = 8;
     /**
      * 使用 ThreadLocal，保存线程安全
-     * 使用 Stack<DataBaseTypeEnum>，保存同一线程内多次切换的数据源，
-     * 防止AOP切点执行完后执行清空数据源配置，将数据源配置变成了 DataBaseTypeEnum.MASTER
+     * 使用 Stack<DataSourceTypeEnum>，保存同一线程内多次切换的数据源，
+     * 防止AOP切点执行完后执行清空数据源配置，将数据源配置变成了 DataSourceTypeEnum.MASTER
      */
     private static final ThreadLocal<Deque<DataSourceTypeEnum>> CONTEXT_HOLDER =
             ThreadLocal.withInitial(() -> new ArrayDeque<>(DEFAULT_DEQUE_CAPACITY));
@@ -34,7 +34,7 @@ public class DataSourceContextHolder {
     /**
      * 根据传入的 dataBaseTypeEnum 切换 数据源
      *
-     * @param dataSourceTypeEnum DataBaseTypeEnum
+     * @param dataSourceTypeEnum DataSourceTypeEnum
      */
     public void setDataSourceType(DataSourceTypeEnum dataSourceTypeEnum) throws NullPointerException {
         if (!CONTEXT_HOLDER.get().offerFirst(dataSourceTypeEnum)) {
