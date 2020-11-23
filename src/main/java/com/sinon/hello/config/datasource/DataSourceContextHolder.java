@@ -24,8 +24,9 @@ public class DataSourceContextHolder {
     private static final int DEFAULT_DEQUE_CAPACITY = 8;
     /**
      * 使用 ThreadLocal，保存线程安全
-     * 使用 Stack<DataSourceTypeEnum>，保存同一线程内多次切换的数据源，
+     * 使用 ArrayDeque<DataSourceTypeEnum>，保存同一线程内多次切换的数据源，
      * 防止AOP切点执行完后执行清空数据源配置，将数据源配置变成了 DataSourceTypeEnum.MASTER
+     * Deque是优化的stack，java已经弃用stack
      */
     private static final ThreadLocal<Deque<DataSourceTypeEnum>> CONTEXT_HOLDER =
             ThreadLocal.withInitial(() -> new ArrayDeque<>(DEFAULT_DEQUE_CAPACITY));
