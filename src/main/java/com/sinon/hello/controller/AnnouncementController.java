@@ -1,6 +1,6 @@
 package com.sinon.hello.controller;
 
-import com.sinon.hello.service.AnnouncementService;
+import com.sinon.hello.service.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/test", produces = "application/json;charset=UTF-8")
 public class AnnouncementController {
+
     @Autowired
-    private AnnouncementService announcementService;
+    private IAnnouncementService announcementService;
 
     @RequestMapping("getMaster/{id}")
     public String GetTest(@PathVariable int id) {
