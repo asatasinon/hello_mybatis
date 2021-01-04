@@ -7,7 +7,10 @@ import com.sinon.hello.mapper.AnnouncementMapper;
 import com.sinon.hello.service.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * @version 1.0.0
@@ -47,9 +50,9 @@ public class AnnouncementService implements IAnnouncementService {
     }
 
 
-//    @Scheduled(cron = "*/1 * * * * ?")
-//    public void test(){
-//        System.out.println(new Date());
-//    }
+    @Scheduled(cron = "*/1 * * * * ?")
+    public void test(){
+        System.out.println(new Date());
+    }
 
 }

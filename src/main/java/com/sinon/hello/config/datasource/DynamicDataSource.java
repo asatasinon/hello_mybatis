@@ -9,7 +9,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  */
 
 /**
- * 3 利用 DatabaseContextHolder 获取当前线程的 datasourcetype
+ * 3 利用 DataSourceContextHolder 获取当前线程的 datasourcetype
  * 动态数据源（需要继承AbstractRoutingDataSource）
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
